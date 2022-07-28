@@ -9,10 +9,34 @@
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/bd/bd.js"></script>
     <script src="assets/js/querys.js"></script>
+    
     </head>
     
     <body>
+        <nav id="controles">
+            <div>
+                <button onclick="toggleAcordes()">Ocultar Acordes</button>
+                <button onclick="subirMedioTono()">Subir Medio Tono</button>
+                <button onclick="bajarMedioTono()">Bajar Medio Tono</button>
+                <button onclick="subirTono()">Subir Tono</button>
+                <button onclick="bajarTono()">Bajar Tono</button>
+                <button onclick="modoNocturno()">Modo Nocturno</button>
+            </div>
+        </nav>
+        <main>
+            <div id="containerCancion">
 
+            </div>
+        </main>
+        <nav id="listadoDeCanciones">
+            
+        </nav>
+
+        <script>
+            $(document).ready(function(){
+                generarBotones();
+            });
+        </script>
     
     </body>
     </html>
