@@ -19,7 +19,8 @@ function cargarCancion(contador){
     var idBtnActual =  '#btn-cancion-'+contador;
     var tituloCancion = $(idBtnActual).text();
     var cancion = cancioneroAleluya[tituloCancion];
-    $('#containerCancion').html(cancioneroAleluya[tituloCancion]);
+    var cancionEnCrudo = cancioneroAleluya[tituloCancion]
+    $('#containerCancion').html(cancionEnCrudo);
 }
 
 function generarBotones (){
