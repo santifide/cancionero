@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const cheerio = require('cheerio');
 
 // Ruta del directorio "canciones"
 const directorioCanciones = './canciones';
@@ -17,19 +18,33 @@ fs.readdir(directorioCanciones, (err, files) => {
   // Generar contenido del index.html
   const indexContent = generarIndexContent(archivosTxt);
 
-  // Escribir en el archivo index.html
+  // Leer el archivo index.html
   const indexPath = path.join(__dirname, 'index.html');
-  fs.writeFile(indexPath, indexContent, (err) => {
+  fs.readFile(indexPath, 'utf-8', (err, data) => {
     if (err) {
-      console.error('Error al escribir el archivo index.html:', err);
+      console.error('Error al leer el archivo index.html:', err);
       return;
     }
-    console.log('El archivo index.html ha sido generado correctamente.');
+
+    // Utilizar Cheerio para manipular el contenido HTML
+    const $ = cheerio.load(data);
+
+    // Insertar el contenido generado dentro del elemento <div id="wrapper-canciones">
+    $('#wrapper-canciones').html(indexContent);
+
+    // Escribir el archivo index.html modificado
+    fs.writeFile(indexPath, $.html(), (err) => {
+      if (err) {
+        console.error('Error al escribir el archivo index.html:', err);
+        return;
+      }
+      console.log('El archivo index.html ha sido modificado correctamente.');
+    });
   });
 });
 
 function generarIndexContent(archivos) {
-  let content = '<div id="wrapper-canciones">\n';
+  let content = '';
 
   archivos.forEach((archivo, index) => {
     const nombreArchivo = archivo.split('.')[0];
@@ -37,11 +52,9 @@ function generarIndexContent(archivos) {
     const buttonId = `button-${index + 1}`;
     const contenidoId = `contenido-${index + 1}`;
 
-    content += `  <button id="${buttonId}">${nombreArchivo}</button>\n`;
-    content += `  <p id="${contenidoId}">${contenidoArchivo}</p>\n`;
+    content += `<button id="${buttonId}">${nombreArchivo}</button>\n`;
+    content += `<p id="${contenidoId}">${contenidoArchivo}</p>\n`;
   });
-
-  content += '</div>';
 
   return content;
 }
